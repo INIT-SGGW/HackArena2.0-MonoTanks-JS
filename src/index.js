@@ -39,12 +39,12 @@ class MyAgent extends Agent {
         }
 
         if (random < 0.33) {
-            return this.rotateTank(randomRotation(), randomRotation());
+            return this.rotate(randomRotation(), randomRotation());
         }
 
         if (random < 0.66) {
             const direction = Math.random() < 0.5 ? MoveDirection.Forward : MoveDirection.Backward;
-            return this.moveTank(direction);
+            return this.move(direction);
         }
 
         if (random < 0.25) {
