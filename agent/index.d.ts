@@ -18,9 +18,11 @@ declare enum PacketType {
     LobbyData = 41,
     LobbyDeleted = 34,
     GameStateGroup = 48,
-    GameStart = 49,
+    GameStarted = 49,
     GameState = 58,
     GameEnd = 59,
+    GameStarting = 52,
+    ReadyToReceiveGameState = 53,
     PlayerResponseGroup = 64,
     Movement = 73,
     Rotation = 74,
@@ -391,7 +393,7 @@ interface IAgent {
     /**
      * Called when the game starts.
      */
-    on_game_start(): void;
+    on_game_starting(): void;
     /**
      * Called when the game state is received.
      *
@@ -433,9 +435,10 @@ declare abstract class Agent implements IAgent {
      */
     set delay(delay: number | number[]);
     abstract on_lobby_data_received(lobbyData: LobbyDataPacket["payload"]): void;
-    abstract on_game_start(): void;
+    abstract on_game_starting(): void;
     abstract next_move(gameState: GameState): Promise<void>;
     abstract on_game_end(results: GameEndPacket["payload"]): void;
+    protected readyToReceiveGameState(): Promise<void>;
     /**
      * Sends a message to the server, resulting in moving the tank in the specified direction.
      * @param direction - The direction to move the tank.

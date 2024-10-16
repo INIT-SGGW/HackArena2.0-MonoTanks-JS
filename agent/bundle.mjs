@@ -4809,9 +4809,11 @@ var PacketType;
     PacketType[PacketType["LobbyDeleted"] = 34] = "LobbyDeleted";
     // GAME STATE GROUP
     PacketType[PacketType["GameStateGroup"] = 48] = "GameStateGroup";
-    PacketType[PacketType["GameStart"] = 49] = "GameStart";
+    PacketType[PacketType["GameStarted"] = 49] = "GameStarted";
     PacketType[PacketType["GameState"] = 58] = "GameState";
     PacketType[PacketType["GameEnd"] = 59] = "GameEnd";
+    PacketType[PacketType["GameStarting"] = 52] = "GameStarting";
+    PacketType[PacketType["ReadyToReceiveGameState"] = 53] = "ReadyToReceiveGameState";
     // PLAYER RESPONSE GROUP
     PacketType[PacketType["PlayerResponseGroup"] = 64] = "PlayerResponseGroup";
     PacketType[PacketType["Movement"] = 73] = "Movement";
@@ -9063,6 +9065,12 @@ class Agent {
         }
         this._delay = delay;
     }
+    readyToReceiveGameState() {
+        const message = {
+            type: PacketType.ReadyToReceiveGameState,
+        };
+        return this._sendMessage(message);
+    }
     /**
      * Sends a message to the server, resulting in moving the tank in the specified direction.
      * @param direction - The direction to move the tank.
@@ -9263,14 +9271,17 @@ class Agent {
                 Log.info("Lobby deleted");
                 this._gracefullyCloseWS();
                 break;
-            case PacketType.GameStart:
+            case PacketType.GameStarting:
+                this.on_game_starting();
+                break;
+            case PacketType.GameStarted:
                 if (Array.isArray(this._delay)) {
                     Log.warning("Message delay set to random number between", this._delay[0], "and", this._delay[1], "ms");
                 }
                 if (typeof this._delay === "number" && this._delay > 0) {
                     Log.warning("Message delay set to", this._delay, "ms");
                 }
-                this.on_game_start();
+                Log.info("Game started");
                 break;
             case PacketType.GameState: {
                 if (this._isProcessing) {
