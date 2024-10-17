@@ -9,12 +9,20 @@ class MyAgent extends Agent {
     on_lobby_data_received(lobbyData) {
         // Function called when the lobby data is received (once when joining the lobby and
         // every time the lobby data is updated).
+        // 
+        // Currently, if you want to use npm run start:watch you need to call here this.readyToReceiveGameState().
+
         Log.info("Lobby data received");
     }
 
-    on_game_start() {
-        // Function called when the game starts.
-        Log.info("Game started");
+    on_game_starting() {
+        // Function called when all players have joined the lobby and game is about to start.
+        // You can use this function to perform initialization of your agent.
+        // When ready, send a message to the server using this.readyToReceiveGameState().
+        // Remember to return the promise from that function function.
+        Log.info("Game is starting");
+
+        return this.readyToReceiveGameState();
     }
 
     next_move(gameState) {
@@ -35,6 +43,10 @@ class MyAgent extends Agent {
                 return Rotation.Right;
             }
             return null;
+        }
+
+        if (random < 0.0001) {
+            return this.requestLobbyData();
         }
 
         if (random < 0.33) {
