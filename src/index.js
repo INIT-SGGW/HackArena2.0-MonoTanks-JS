@@ -9,8 +9,6 @@ class MyAgent extends Agent {
     on_lobby_data_received(lobbyData) {
         // Function called when the lobby data is received (once when joining the lobby and
         // every time the lobby data is updated).
-        // 
-        // Currently, if you want to use npm run start:watch you need to call here this.readyToReceiveGameState().
 
         Log.info("Lobby data received");
     }
