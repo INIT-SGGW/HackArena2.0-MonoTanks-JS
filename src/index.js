@@ -1,4 +1,4 @@
-const { Bot, MoveDirection, Rotation, Log } = require("../bot/bundle.cjs");
+const { Bot, MoveDirection, Rotation, Log, BulletType, TileTypes, BulletDirection, Direction, ItemTypes } = require("../bot/bundle.cjs");
 
 /**
  * Here you can implement your bot.
@@ -35,6 +35,141 @@ class MyBot extends Bot {
         //
         // Functions that perform actions return a promise that resolves when the action is sent to the server.
         // Remember to return the promise from next_move function.
+
+        // Printing current game state to the console to show the structure of the gameState object
+
+        if (gameState.tick % 50 === 0) {
+            Log.info("-------- Game state --------");
+            Log.info("Game state ID: ", gameState.gameStateId);
+            Log.info("Tick: ", gameState.tick);
+            Log.info("Self: ", gameState.self);
+            Log.info("Players: ", gameState.players);
+            Log.info("My tank: ", gameState.myTank);
+            gameState.map.tiles.forEach((row, i) => {
+                row.forEach((cell, j) => {
+                    let tileToPrint = "";
+
+                    cell.forEach((tile, k) => {
+                        switch (tile.type) {
+                            case TileTypes.Empty:
+                                tileToPrint = ' ';
+
+                                if (gameState.map.visibility[i][j] === '1') {
+                                    tileToPrint = '.';
+                                }
+
+                                gameState.map.zones.forEach((zone) => {
+                                    if (zone.x <= j && j < zone.x + zone.width && zone.y <= i && i < zone.y + zone.height) {
+                                        tileToPrint = String.fromCharCode(Number(zone.index));
+                                    }
+                                });
+                                break;
+
+                            case TileTypes.Wall:
+                                tileToPrint = '#';
+                                break;
+
+                            case TileTypes.Bullet:
+                                const bullet = tile;
+                                switch (bullet.payload.type) {
+                                    case BulletType.Bullet:
+                                        switch (bullet.payload.direction) {
+                                            case BulletDirection.Up:
+                                                tileToPrint = '^';
+                                                break;
+                                            case BulletDirection.Right:
+                                                tileToPrint = '>';
+                                                break;
+                                            case BulletDirection.Down:
+                                                tileToPrint = 'v';
+                                                break;
+                                            default:
+                                                tileToPrint = '<';
+                                                break;
+                                        }
+                                        break;
+                                    default:
+                                        switch (bullet.payload.direction) {
+                                            case BulletDirection.Up:
+                                                tileToPrint = '⇈';
+                                                break;
+                                            case BulletDirection.Right:
+                                                tileToPrint = '⇉';
+                                                break;
+                                            case BulletDirection.Down:
+                                                tileToPrint = '⇊';
+                                                break;
+                                            default:
+                                                tileToPrint = '⇇';
+                                                break;
+                                        }
+                                        break;
+                                }
+                                break;
+
+                            case TileTypes.Tank:
+                                const tank = tile;
+                                if (tank.payload.ownerId === gameState.self?.id) {
+                                    switch (tank.payload.direction) {
+                                        case Direction.Up:
+                                            tileToPrint = '↑';
+                                            break;
+                                        case Direction.Right:
+                                            tileToPrint = '→';
+                                            break;
+                                        case Direction.Down:
+                                            tileToPrint = '→'; // should this be '↓'?
+                                            break;
+                                        default:
+                                            tileToPrint = '←';
+                                            break;
+                                    }
+                                } else {
+                                    tileToPrint = 'T';
+                                }
+                                break;
+
+                            case TileTypes.Item:
+                                if (tileToPrint !== "") {
+                                    break;
+                                }
+
+                                const item = tile;
+                                switch (item.payload.type) {
+                                    case ItemTypes.Laser:
+                                        tileToPrint = 'L';
+                                        break;
+                                    case ItemTypes.DoubleBullet:
+                                        tileToPrint = 'D';
+                                        break;
+                                    case ItemTypes.Radar:
+                                        tileToPrint = 'R';
+                                        break;
+                                    default:
+                                        tileToPrint = 'M';
+                                }
+                                break;
+
+                            case TileTypes.Mine:
+                                tileToPrint = 'X';
+                                break;
+
+                            case TileTypes.Laser:
+                                tileToPrint = '|';
+                                break;
+
+                            default:
+                                tileToPrint = '?';
+                        }
+                    });
+
+                    process.stdout.write(tileToPrint);
+                });
+
+                process.stdout.write("\n");
+            });
+
+        }
 
         const random = Math.random();
 

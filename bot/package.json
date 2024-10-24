@@ -1,12 +1,13 @@
 {
-  "name": "agent",
+  "name": "bot",
   "version": "1.0.0",
   "description": "",
   "main": "./bundle.cjs",
   "module": "./bundle.mjs",
+  "types": "./index.d.ts",
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "agent": "file:"
+    "bot": "file:"
   }
 }
