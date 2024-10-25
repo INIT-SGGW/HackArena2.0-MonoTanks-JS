@@ -133,3 +133,7 @@ You will need to submit a zip file containing the whole repository. Of course, p
 ### What if I have a problem with the API wrapper?
 
 If you have any problems with the API wrapper, please contact any of the organizers. We will try to help you as soon as possible.
+
+### Can I use ESmodules?
+
+Yes, you can use ES modules in your bot. Just remember to change the `type` field in your `package.json` to `module`.

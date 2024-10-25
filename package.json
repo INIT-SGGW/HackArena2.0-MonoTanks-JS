@@ -13,6 +13,7 @@
   "dependencies": {
     "bot-js": "file:",
     "commander": "^12.1.0",
+    "hackarena-api-js": "file:bot",
     "ws": "^8.18.0"
   },
   "devDependencies": {
