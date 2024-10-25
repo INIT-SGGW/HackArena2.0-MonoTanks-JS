@@ -1,4 +1,4 @@
-const { Bot, MoveDirection, Rotation, Log, BulletType, TileTypes, BulletDirection, Direction, ItemTypes } = require("../bot/bundle.cjs");
+const { Bot, MoveDirection, Rotation, Log, BulletType, TileTypes, BulletDirection, Direction, ItemTypes } = require("hackarena-bot-js");
 
 /**
  * Here you can implement your bot.
