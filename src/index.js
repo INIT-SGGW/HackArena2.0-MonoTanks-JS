@@ -1,4 +1,4 @@
-const { Bot, MoveDirection, Rotation, Log, BulletType, TileTypes, BulletDirection, Direction, ItemTypes } = require("hackarena-bot-js");
+const { Bot, MoveDirection, Rotation, Log, BulletType, TileTypes, BulletDirection, Direction, ItemTypes } = require("hackarena-api-js");
 
 /**
  * Here you can implement your bot.
